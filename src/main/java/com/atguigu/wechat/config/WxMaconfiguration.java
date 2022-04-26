@@ -6,6 +6,7 @@ import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
 import cn.binarywang.wx.miniapp.api.impl.WxMaUserServiceImpl;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import com.atguigu.wechat.pojo.WxMaProperties;
+import com.atguigu.wechat.util.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -42,4 +43,9 @@ public class WxMaconfiguration {
         return wxMaUserService;
     }
 
+    @Bean
+    public Result result(){
+        Result result=new Result();
+        return result;
+    }
 }
