@@ -10,7 +10,7 @@ wx:
      secret: d5da157e742149e31bb6a448c0255a2f
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/wechat
+    url: jdbc:mysql://localhost:3306/wechat?useUnicode=true&characterEncoding=UTF-8
     username: root
     password: wwl04212430
     driver-class-name: com.mysql.jdbc.Driver

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpSession;
 //import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -53,14 +54,15 @@ public class Login {
 
         String code=msg.getString("code");
         Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         WxMaJscode2SessionResult sessionInfo = wxMaUserService.getSessionInfo(code);
         String token=wxMaService.getAccessToken();
 
 ////      用户信息获取
         String openId=sessionInfo.getOpenid();
         String sessionKey=sessionInfo.getSessionKey();
-        String createTime= String.valueOf(date.getTime());
-        String lastVisitTime=String.valueOf(date.getTime());
+        String createTime= formatter.format(date);
+        String lastVisitTime=formatter.format(date);
         String nickName=userInfo.getString("nickName");
         String gender=userInfo.getString("gender");
         String avatarUrl=userInfo.getString("avatarUrl");
@@ -72,8 +74,17 @@ public class Login {
 //        String nickName=wxMaUserInfo.getNickName();
 //        String avatarUrl=wxMaUserInfo.getAvatarUrl();
 
+        if (userService.selectSingleUser(openId)==null){
+            userService.saveUser(new User(openId,sessionKey,createTime,lastVisitTime,gender,nickName,avatarUrl));
+        }
+        else {
+            Date date1=new Date();
+            String lastVisitTime1=formatter.format(date1);
+            System.out.println("hello");
+            userService.updateUserByPriSel(new User(openId,null,null,lastVisitTime1,null,null,null));
+        }
 
-        userService.saveUser(new User(openId,sessionKey,createTime,lastVisitTime,gender,nickName,avatarUrl));
+
 
         System.out.println("token:"+token);
         System.out.println("openid:"+openId+"\nsessionkey:"+sessionKey);
