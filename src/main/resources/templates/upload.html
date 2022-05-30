@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>上传</title>
+</head>
+<body>
+<form method="post" th:action="@{/manager/upload}" enctype="multipart/form-data">
+    文件类型:<input type="text" name="rtype"><br>
+    文件标题:<input type="text" name="rtitle"><br>
+    <input type="file" name="resource" value="选择文件"><br>
+    <input type="submit" value="上传"><br>
+</form>
+已上传<p th:text="${session.count}"></p>个文件
+</body>
+</html>

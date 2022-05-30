@@ -14,6 +14,7 @@
                         connectionURL="jdbc:mysql://localhost:3306/wechat"
                         userId="root"
                         password="wwl04212430">
+            <property name="nullCatalogmeansCurrent" value="true"/>
         </jdbcConnection>
         <!-- javaBean的生成策略-->
         <javaModelGenerator targetPackage="com.atguigu.wechat.pojo" targetProject=".\src\main\java">
@@ -33,5 +34,6 @@
         <!-- tableName设置为*号，可以对应所有表，此时不写domainObjectName -->
         <!-- domainObjectName属性指定生成出来的实体类的类名 -->
         <table tableName="user" domainObjectName="User"/>
+        <table tableName="resources" domainObjectName="Resources"/>
     </context>
 </generatorConfiguration>

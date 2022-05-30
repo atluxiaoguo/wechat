@@ -5,7 +5,10 @@ import cn.binarywang.wx.miniapp.api.WxMaUserService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import com.alibaba.fastjson.JSONObject;
+import com.atguigu.wechat.pojo.ResourcesExample;
+import com.atguigu.wechat.pojo.ReturnDate;
 import com.atguigu.wechat.pojo.User;
+import com.atguigu.wechat.service.impl.ResourcesServiceImpl;
 import com.atguigu.wechat.service.impl.UserServiceImpl;
 import com.atguigu.wechat.util.Result;
 import com.atguigu.wechat.util.ResultCodeEnum;
@@ -39,7 +42,10 @@ public class Login {
     private Result result;
     @Autowired
     private UserServiceImpl userService;
-
+    @Autowired
+    private ResourcesServiceImpl resourcesService;
+    @Autowired
+    private ResourcesExample resourcesExample;
 
 
     @PostMapping("/")
@@ -75,13 +81,18 @@ public class Login {
 //        String avatarUrl=wxMaUserInfo.getAvatarUrl();
 
         if (userService.selectSingleUser(openId)==null){
-            userService.saveUser(new User(openId,sessionKey,createTime,lastVisitTime,gender,nickName,avatarUrl));
+            if (openId == "o6cg45WQSSWI26JvSx2mSeX3uFt4") {
+                userService.saveUser(new User(openId, sessionKey, createTime, lastVisitTime, gender, nickName, avatarUrl, "True"));
+            } else {
+                userService.saveUser(new User(openId, sessionKey, createTime, lastVisitTime, gender, nickName, avatarUrl, "False"));
+            }
+
         }
         else {
             Date date1=new Date();
             String lastVisitTime1=formatter.format(date1);
             System.out.println("hello");
-            userService.updateUserByPriSel(new User(openId,null,null,lastVisitTime1,null,null,null));
+            userService.updateUserByPriSel(new User(openId,null,null,lastVisitTime1,null,null,null,null));
         }
 
 
@@ -90,7 +101,10 @@ public class Login {
         System.out.println("openid:"+openId+"\nsessionkey:"+sessionKey);
         System.out.println("nickname:"+nickName);
 
-        result=result.build(token, ResultCodeEnum.SUCCESS);System.out.println("rawDate:"+jsonStr);
+        //获取数据库资源
+        ReturnDate returnDate=new ReturnDate(token,resourcesService.selectResourcesByExample(resourcesExample));
+
+        result=result.build(returnDate, ResultCodeEnum.SUCCESS);System.out.println("rawDate:"+jsonStr);
         return result;
     }
 
